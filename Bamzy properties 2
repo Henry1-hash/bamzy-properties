@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Bamzy Properties</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    header {
+      background: #123728;
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 10px;
+      font-size: 32px;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 50px 20px;
+      background: white;
+    }
+
+    .hero h2 {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 17px;
+    }
+
+    .properties {
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    .properties h2,
+    .gallery-section h2 {
+      color: #123728;
+      font-size: 28px;
+    }
+
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      width: 280px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    }
+
+    .card h3 {
+      color: #123728;
+    }
+
+    .gallery-section {
+      padding: 30px 15px 50px;
+      text-align: center;
+      background: white;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      max-width: 1100px;
+      margin: 20px auto;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    .gallery img:hover {
+      transform: scale(1.02);
+    }
+
+    #loading {
+      color: #555;
+      font-size: 16px;
+    }
+
+    footer {
+      background: #123728;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Bamzy Properties</h1>
+    <p>
+      Trusted real estate for buying, selling, renting and property management
+    </p>
+  </header>
+
+  <section class="hero">
+    <h2>Find Your Perfect Property</h2>
+    <p>
+      We help you find quality properties for your needs.
+    </p>
+  </section>
+
+  <section class="properties">
+    <h2>Our Services</h2>
+
+    <div class="cards">
+
+      <div class="card">
+        <h3>🏠 Property Sales</h3>
+        <p>Find properties available for purchase.</p>
+      </div>
+
+      <div class="card">
+        <h3>🔑 Property Rentals</h3>
+        <p>Find comfortable homes and apartments for rent.</p>
+      </div>
+
+      <div class="card">
+        <h3>🏢 Property Management</h3>
+        <p>Professional management of residential and commercial properties.</p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- PROPERTY GALLERY -->
+
+  <section class="gallery-section">
+
+    <h2>🏠 Available Properties</h2>
+
+    <p>Browse some of our available properties below.</p>
+
+    <p id="loading">Loading property pictures...</p>
+
+    <div class="gallery" id="gallery"></div>
+
+  </section>
+
+
+  <footer>
+    <p>© 2026 Bamzy Properties. All rights reserved.</p>
+  </footer>
+
+
+  <script>
+
+    /*
+      This automatically finds image files
+      in your GitHub repository.
+    */
+
+    const gallery = document.getElementById("gallery");
+    const loading = document.getElementById("loading");
+
+    const apiUrl =
+      "https://api.github.com/repos/henryl-hash/bamzy-properties/contents/?ref=main";
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(files => {
+
+        loading.style.display = "none";
+
+        let imageCount = 0;
+
+        files.forEach(file => {
+
+          if (
+            file.type === "file" &&
+            (
+              file.name.toLowerCase().endsWith(".jpg") ||
+              file.name.toLowerCase().endsWith(".jpeg") ||
+              file.name.toLowerCase().endsWith(".png") ||
+              file.name.toLowerCase().endsWith(".webp") ||
+              file.name.toLowerCase().endsWith(".gif")
+            )
+          ) {
+
+            const img = document.createElement("img");
+
+            img.src = file.download_url;
+            img.alt = "Bamzy Properties";
+
+            gallery.appendChild(img);
+
+            imageCount++;
+          }
+
+        });
+
+        if (imageCount === 0) {
+          loading.style.display = "block";
+          loading.textContent =
+            "No property pictures were found.";
+        }
+
+      })
+      .catch(error => {
+
+        loading.textContent =
+          "Unable to load the property pictures.";
+
+        console.log(error);
+
+      });
+
+  </script>
+
+</body>
+</html>
